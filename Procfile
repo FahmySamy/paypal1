@@ -1,1 +1,1 @@
-web: python ينقل الارقام والضغط 4.py
+web: python main.py
