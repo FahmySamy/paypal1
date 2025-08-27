@@ -9,6 +9,10 @@ import random
 import string
 import os
 
+# --- New Imports for WebDriver Manager ---
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+
 # It's highly recommended to use selenium-stealth to avoid bot detection
 # Run: pip install selenium-stealth
 from selenium_stealth import stealth
@@ -42,16 +46,22 @@ chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
 chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
-profile_path = os.path.join(os.getcwd(), "chrome_profile")
-if not os.path.exists(profile_path):
-    os.makedirs(profile_path)
-    print(f"✅ Created new Chrome profile directory at: {profile_path}")
-
+# --- استخدام مسار البروفايل الخاص بك ---
+#
+# IMPORTANT: YOU MUST CHANGE THIS PATH TO YOUR OWN CHROME PROFILE PATH.
+# The path should point to the "User Data" folder, which contains the "Default" folder.
+# Example for Windows: "C:\\Users\\YourUsername\\AppData\\Local\\Google\\Chrome\\User Data"
+#
+# --- مهم: يجب أن تقوم بتغيير هذا المسار إلى مسار البروفايل الخاص بك.
+# المسار يجب أن يشير إلى مجلد "User Data" الذي يحتوي بداخله على مجلد "Default".
+# مثال لنظام ويندوز: "C:\\Users\\YourUsername\\AppData\\Local\\Google\\Chrome\\User Data"
+profile_path = "CHANGE_THIS_TO_YOUR_PROFILE_PATH" 
 chrome_options.add_argument(f"user-data-dir={profile_path}")
-chrome_options.add_argument("profile-directory=Default")
 
 # --- تشغيل الكود ---
-driver = webdriver.Chrome(options=chrome_options)
+service = Service(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=chrome_options)
+
 stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True)
 
 try:
